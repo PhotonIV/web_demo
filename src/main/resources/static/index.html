@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Push Logs</title>
+</head>
+<body>
+<h1>Push Logs</h1>
+<!-- 搜索框 -->
+<input type="text" id="searchInput" placeholder="输入 Code">
+<button onclick="searchByCode()">搜索</button>
+<button onclick="exportWithCode()">下载当前页面数据</button>
+<button onclick="rePush()">重新推送数据</button>
+
+<button type="button"  onclick="cleanAll()">Clean All</button>
+<table id="pushLogs">
+    <tr>
+        <th style="width: 50px;text-align: left;">id</th>
+        <th style="width: 150px;text-align: left;">code</th>
+        <th style="width: 150px;text-align: left;">pushTime</th>
+        <th style="width: 150px;text-align: left;">lastTime</th>
+        <th style="width: 200px;text-align: left;">pushDate</th>
+        <th style="width: 200px;text-align: left;">lastDate</th>
+        <th>操作</th>
+        <!-- 其他字段列 -->
+    </tr>
+    <tr th:each="pushLog : ${pushLogs}">
+        <td th:text="${pushLog.id}"></td>
+        <td th:text="${pushLog.code}"></td>
+        <td th:text="${pushLog.pushTime}"></td>
+        <td th:text="${pushLog.lastTime}"></td>
+        <td th:text="${pushLog.pushDate}"></td>
+        <td th:text="${pushLog.lastDate}"></td>
+        <td>
+            <a th:href="@{'/api/push/get_log_det?id=' + ${pushLog.id}}">详情</a> <!-- 使用超链接跳转到详情页面 -->
+            <a  style="color: red;" th:href="@{'/api/push/delete?id=' + ${pushLog.id}}" onclick="deleteAndReload(this)" >删除</a> <!-- 使用超链接跳转到详情页面 -->
+        </td>
+    </tr>
+</table>
+</body>
+</html>
+
+
+<!-- JavaScript代码，定义cleanAll函数以触发URL -->
+
+<script type="text/javascript">
+    function cleanAll() {
+        // 使用JavaScript发送GET请求到指定URL
+        // 请根据你的实际URL替换'/api/push/cleanAll'
+        var url = '/api/push/clean_all';
+
+        // 使用XMLHttpRequest对象发送GET请求
+        var xhr = new XMLHttpRequest();
+
+        xhr.open('GET', url, true);
+
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                // 请求成功后可以执行一些操作
+                alert('Clean All Successful');
+                window.location.reload();
+            } else if (xhr.readyState === 4) {
+                // 请求失败后可以执行一些操作
+                alert('Clean All Failed');
+            }
+        };
+
+        xhr.send();
+    }
+
+    function deleteAndReload(button) {
+        // 获取删除按钮的链接 URL
+        var url = button.getAttribute("href");
+
+        // 使用 confirm 弹窗进行二次确认
+        var confirmation = confirm('确定要删除吗？');
+
+        if (confirmation) {
+            // 用户点击了确认按钮，继续执行操作
+            var xhr = new XMLHttpRequest();
+
+            xhr.open('GET', url, true);
+
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4) {
+                    if (xhr.status === 200) {
+                        // 请求成功后可以执行一些操作
+                        alert('删除成功');
+                        // 刷新页面
+                        window.location.reload();
+                    } else {
+                        // 请求失败后可以执行一些操作
+                        alert('删除失败');
+                    }
+                }
+            };
+
+            xhr.send();
+        } else {
+            // 用户点击了取消按钮，不执行操作
+            alert('操作已取消');
+        }
+
+        // 阻止默认的链接跳转
+        event.preventDefault();
+    }
+   function searchByCode(){
+       performSearch();
+   }
+</script>
+
+<script type="text/javascript">
+    // 监听输入框的键盘事件
+    document.getElementById("searchInput").addEventListener("keyup", function(event) {
+        if (event.key === "Enter") {
+            performSearch(); // 用户按下回车键时执行搜索
+        }
+    });
+
+    function performSearch() {
+        var code = document.getElementById("searchInput").value;
+
+        // 构建搜索URL
+        var searchUrl = '/api/push/get_log?code=' + code;
+
+        // 跳转到搜索URL
+        window.location.href = searchUrl;
+    }
+
+    function exportWithCode() {
+        // 获取当前URL
+        var currentUrl = window.location.href;
+
+        // 使用正则表达式从URL中提取code参数的值
+        var regex = /[?&]code=([^&]+)/;
+        var match = currentUrl.match(regex);
+
+        if (match) {
+            // 如果匹配成功，获取code参数的值
+            var codeValue = match[1];
+
+            // 构建导出URL
+            var exportUrl = '/api/push/export?code=' + codeValue;
+
+            // 执行导出操作，可以使用类似Ajax的方式或直接跳转到导出URL
+            window.location.href = exportUrl;
+        } else {
+            // 如果未找到code参数，进行适当的错误处理
+            var exportUrl = '/api/push/export';
+        }
+
+        // 执行导出操作，可以使用类似Ajax的方式或直接跳转到导出URL
+        window.location.href = exportUrl;
+    }
+
+    function rePush() {
+         window.location.href = '/api/view/repush';
+    }
+
+</script>
+

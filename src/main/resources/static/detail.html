@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>PushLog 详情</title>
+</head>
+<body>
+<h1>PushLog 详情</h1>
+<table>
+    <tr>
+        <th style="width: 150px;  text-align: left;">字段</th>
+        <th style="width: 200px;  text-align: left;">数值</th>
+    </tr>
+    <tr>
+        <td>ID</td>
+        <td th:text="${pushLog.id}"></td>
+    </tr>
+    <tr>
+        <td>Corp</td>
+        <td th:text="${pushLog.corp}"></td>
+    </tr>
+    <tr>
+        <td>Code</td>
+        <td th:text="${pushLog.code}"></td>
+    </tr>
+    <tr>
+        <td>PushTime</td>
+        <td th:text="${pushLog.pushTime}"></td>
+    </tr>
+    <tr>
+        <td>LastTime</td>
+        <td th:text="${pushLog.lastTime}"></td>
+    </tr>
+    <tr>
+        <td>PushDate</td>
+        <td th:text="${pushLog.PushDate}"></td>
+    </tr>
+    <tr>
+        <td>LastDate</td>
+        <td th:text="${pushLog.lastDate}"></td>
+    </tr>
+
+</table>
+<p>Request Log:</p>
+<textarea th:text="${pushLog.reqLog}" rows="30"  cols="100" name="reqLog"></textarea>
+<p>Response  Log:</p>
+<textarea th:text="${pushLog.resLog}"  rows="6"  cols="100" name="resLog"></textarea>
+<p>Error  Log:</p>
+<textarea th:text="${pushLog.errorLog}"  rows="10"  cols="100" name="resLog"></textarea>
+</body>
+</html>

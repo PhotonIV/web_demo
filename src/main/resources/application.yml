@@ -1,0 +1,34 @@
+server:
+  port: ${SERVER_PORT:9996}
+spring:
+  datasource:
+    first:
+      jdbc-url: jdbc:mysql://${FIRST_DATA_URL:localhost}:${FIRST_DATA_PORT:3306}/${FIRST_DATA_BASE:test}
+      username: ${FIRST_DATA_USER:root}
+      password: ${FIRST_DATA_PASSWORD:123456}
+      driver-class-name: com.mysql.cj.jdbc.Driver
+    second:
+      jdbc-url: jdbc:sqlite:${SECOND_PATH:db/db.db}
+      driver-class-name: org.sqlite.JDBC
+
+  redis:
+    host: ${REDIS_HOST:localhost}
+    database: ${REDIS_DATABASE:1}
+    port: ${REDIS_PORT:6379}
+    password: ${REDIS_PASSWORD:123456}
+  thymeleaf:
+    cache: false  #开启缓存
+    check-template: true  #检查模板是否存在
+    check-template-location: true # 检查模板位置正确性 默认查找 resources templates文件夹内
+    enabled: true
+    encoding: UTF-8
+    prefix: classpath:/static/
+    suffix: .html
+  jackson:
+    time-zone: ${TIME_ZONE:Asia/Shanghai}
+
+mybatis-plus:
+  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: com.photon.demo.domain
+  configuration:
+    log-impl:

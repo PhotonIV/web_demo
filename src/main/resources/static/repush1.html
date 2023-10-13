@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+    <meta charset="UTF-8">
+    <title>重新推送</title>
+</head>
+<body>
+<div>
+    <form action="/api/push/re_push" method="post">
+        code：<input type="text" placeholder="请输入推送code" name="code" /><br/>
+        <br/>
+        开始时间 ：<input type="text" placeholder="请输入开始时间" name="time"/><br/>
+        <br/>
+        结束时间 ：<input type="text" placeholder="请输入结束时间" name="lastPushEndTime"/><br/>
+        <br/>
+        是否重新推送<input type="checkbox" id="myCheckbox" name="rePush">
+<!--        <p id="result">Checkbox 状态：未选中</p>-->
+        </p>
+        <input type="submit" value="提交"/>
+    </form>
+</div>
+</body>
+</html>
+<script type="text/javascript">
+    // 获取复选框元素
+    var checkbox = document.getElementById("myCheckbox");
+
+    // 在表单提交前监听复选框的状态
+    document.getElementById("rePush").addEventListener("submit", function(event) {
+        // 如果复选框被勾选，则设置 rePush 为 "true"，否则设置为 "false"
+        if (checkbox.checked) {
+            checkbox.value = "true";
+        } else {
+            checkbox.value = "false";
+        }
+    });
+</script>
